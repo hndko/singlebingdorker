@@ -19,20 +19,26 @@
 # Update repositories
 apt update && apt upgrade -y
 
-# Install dependencies
-apt install php curl git -y
+# Install Python and Pip
+apt install python3 python3-pip -y
 
 # Clone the repository
-git clone https://github.com/kyo1337/singlebingdorker
+git clone https://github.com/hndko/singlebingdorker
 cd singlebingdorker
+
+# Install Python Dependencies
+pip3 install -r requirements.txt
+
+# Install Playwright Browsers
+playwright install chromium
 ```
 
 ## 💻 Usage
 
-Run the script using PHP CLI.
+Run the powerful Python script:
 
 ```bash
-php bing.php "your_dork_here"
+python3 bing_dorker.py "your_dork_here"
 ```
 
 ### Example
@@ -40,11 +46,13 @@ php bing.php "your_dork_here"
 Save the output to a file:
 
 ```bash
-php bing.php "inurl:/buy.php" > output.txt
+python3 bing_dorker.py "inurl:/buy.php" > output.txt
 ```
 
 ## 📝 Notes
 
+- **Python Version**: Much more powerful, uses a real browser engine to bypass CAPTCHAs.
+- **PHP Version**: `bing.php` is available as a lightweight legacy alternative.
 - Ensure you have a stable internet connection.
 - Use responsibly.
 - [Contact Developer](https://linktr.ee/doko1554)
@@ -55,4 +63,4 @@ This project is for educational purposes only.
 
 ---
 
-_Created with ❤️ by Kyuoko_
+_Created with ❤️ by hndko_
