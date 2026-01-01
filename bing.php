@@ -10,25 +10,27 @@ define('BOLD', "\033[1m");
 define('RESET', "\033[0m");
 
 // Banner
-function banner() {
-    echo CYAN . "
+function banner()
+{
+    fwrite(STDERR, CYAN . "
     ██████╗ ██╗███╗   ██╗ ██████╗
     ██╔══██╗██║████╗  ██║██╔════╝
     ██████╔╝██║██╔██╗ ██║██║  ███╗
     ██╔══██╗██║██║╚██╗██║██║   ██║
     ██████╔╝██║██║ ╚████║╚██████╔╝
     ╚═════╝ ╚═╝╚═╝  ╚═══╝ ╚═════╝
-    " . RESET . "\n";
-    echo YELLOW . "    🔥 Auto Dorker Bing Single v2.0 🔥" . RESET . "\n";
-    echo GREEN . "    👨‍💻 Created By : Kyuoko" . RESET . "\n";
-    echo BLUE . "    🚀 Thx To : UKL-TEAM, GFS-TEAM, AND YOU" . RESET . "\n";
-    echo "    --------------------------------------------\n";
+    " . RESET . "\n");
+    fwrite(STDERR, YELLOW . "    🔥 Auto Dorker Bing Single v2.0 🔥" . RESET . "\n");
+    fwrite(STDERR, GREEN . "    👨‍💻 Created By : Kyuoko" . RESET . "\n");
+    fwrite(STDERR, BLUE . "    🚀 Thx To : UKL-TEAM, GFS-TEAM, AND YOU" . RESET . "\n");
+    fwrite(STDERR, "    --------------------------------------------\n");
 }
 
 // Help Menu
-function usage() {
-    echo RED . "    [!] Usage: php bing.php \"dork\"" . RESET . "\n";
-    echo YELLOW . "    [?] Ex   : php bing.php \"inurl:/buy.php\" > output.txt" . RESET . "\n";
+function usage()
+{
+    fwrite(STDERR, RED . "    [!] Usage: php bing.php \"dork\"" . RESET . "\n");
+    fwrite(STDERR, YELLOW . "    [?] Ex   : php bing.php \"inurl:/buy.php\" > output.txt" . RESET . "\n");
     exit;
 }
 
@@ -47,7 +49,8 @@ banner();
 fwrite(STDERR, GREEN . "    [+] Target Dork : " . BOLD . $dork . RESET . "\n");
 fwrite(STDERR, BLUE . "    [~] Starting Scanning..." . RESET . "\n");
 
-function getRandomUserAgent() {
+function getRandomUserAgent()
+{
     $agents = [
         'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
         'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
@@ -58,7 +61,8 @@ function getRandomUserAgent() {
     return $agents[array_rand($agents)];
 }
 
-function getSource($url) {
+function getSource($url)
+{
     $curl = curl_init($url);
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
     curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
@@ -69,7 +73,7 @@ function getSource($url) {
 
     $content = curl_exec($curl);
 
-    if(curl_errno($curl)){
+    if (curl_errno($curl)) {
         fwrite(STDERR, RED . "    [!] Error: " . curl_error($curl) . RESET . "\n");
     }
 
@@ -93,15 +97,15 @@ while ($npage <= $npages) {
         preg_match_all('/<h2><a href="(.*?)" h="ID/', $x, $findlink);
 
         if (empty($findlink[1])) {
-             // Try alternative regex if structure changed
-             preg_match_all('/<li class="b_algo"><h2><a href="(.*?)"/', $x, $findlink);
+            // Try alternative regex if structure changed
+            preg_match_all('/<li class="b_algo"><h2><a href="(.*?)"/', $x, $findlink);
         }
 
         if (!empty($findlink[1])) {
             foreach ($findlink[1] as $fl) {
                 // Filter out microsoft or bing links if any
                 if (strpos($fl, 'bing.com') === false && strpos($fl, 'microsoft.com') === false) {
-                     $allLinks[] = $fl;
+                    $allLinks[] = $fl;
                 }
             }
         } else {
@@ -110,8 +114,8 @@ while ($npage <= $npages) {
             // but usually empty results means end or block.
             // Let's assume end of results to avoid infinite loop on empty.
             if (empty($findlink[1]) && strpos($x, '<a href="" class="sb_pagN">') === false) {
-                 fwrite(STDERR, RED . "\n    [!] No more meaningful results found." . RESET . "\n");
-                 break;
+                fwrite(STDERR, RED . "\n    [!] No more meaningful results found." . RESET . "\n");
+                break;
             }
         }
 
@@ -123,7 +127,6 @@ while ($npage <= $npages) {
             fwrite(STDERR, "\n    [!] End of pages reached." . RESET . "\n");
             break;
         }
-
     } else {
         fwrite(STDERR, RED . "\n    [!] Failed to retrieve content." . RESET . "\n");
         break;
@@ -152,4 +155,3 @@ fwrite(STDERR, "    --------------------------------------------\n");
 foreach ($array as $domain) {
     echo "http://$domain/\n";
 }
-?>
